@@ -1,27 +1,36 @@
+#BEGIN_IMPORTS
 from parse_json_file import data
 import random
 import sys
+#END_IMPORTS
 
 
-
+#holds attributes such as name score and answer
 class player:
 	def __init__(self, name, score, answer):
 		self.name = name
 		self.score = score
 		self.answer = answer
+
+	#method to add or decrement from the score as required
 	def update_score(self, correct):
 		if correct:
 			self.score += 1
 		else:
 			self.score -= 1
 
-
+#sets the game mode (start) and initializes the player as well as their 
+#score from above definition
 def initialize_game():
-	print("Welcome to the Trivia Challeng!\n")
+	print("Welcome to the Trivia Challenge!\n")
 	player.name = input("What's your name? ")
 	player.score = 0
 	print("Lets help you get better at trivia!\n")
 
+#merges correct answer with other options to
+#provide user with multiple choice answers for gameplay
+#uses random module to insert correct answer at specific
+#index of all answers array
 def get_answers(index):
 	correct_index = random.randint(0,3)
 	all_answers = index.get("incorrect")
@@ -31,7 +40,8 @@ def get_answers(index):
 	return correct_index + 1
 
 
-
+#runs the game using above player class and helper functions
+#iteratively goes through all questions in JSON file
 def play_game():
 	count = 1
 	for val in data:
@@ -45,14 +55,14 @@ def play_game():
 		if int(player.answer) == correct:
 			player.update_score(player, True)
 			print("\n")
-			print("Well Done!")
-			print(player.name, "current score:", player.score)
+			print("Well Done %s!" % player.name)
+			print("Current score:", player.score)
 			print("\n")
 		else:
 			player.update_score(player, False)
 			print("\n")
 			print("Not quite... The correct answer was:", val.get('correct'))
-			print(player.name, "current score:", player.score, "\n")
+			print("Current score: %d" % (player.score), "\n")
 			print("Lets try again!\n")
 		count += 1
 
@@ -72,7 +82,6 @@ def main():
 	play_game()
 	end_game()
 	sys.exit()
-
 
 
 
